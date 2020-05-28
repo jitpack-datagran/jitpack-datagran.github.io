@@ -6,7 +6,7 @@ var loginCredentials = { username : "", password : "" }
              datagranButtonOnclick("Logout");
         });
         document.getElementById("datagranOnClick").addEventListener("click", function() {
-             datagranButtonOnclick("onClick");
+             datagranButtonOnclick("ButtonClick");
         });
         
         document.getElementById("datagranOnKeyPress").addEventListener("input", function() {
