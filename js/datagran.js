@@ -9,13 +9,13 @@ function identify(custom_user_id) {
       && window.webkit.messageHandlers) {
     // Call iOS interface
     
-    alert("iOS");
+    //alert("iOS");
     var message = { command: 'identify', userId: custom_user_id };
     window.webkit.messageHandlers.datagran.postMessage(message);
   } else {
     // Call Web interface
     
-    alert("identify Web "+ custom_user_id);
+    alert("Web identify "+ custom_user_id);
   }
 }
 
@@ -30,13 +30,13 @@ function reset() {
       && window.webkit.messageHandlers) {
     // Call iOS interface
     
-    alert("iOS");
+    //alert("iOS");
     var message = { command: 'reset' };
     window.webkit.messageHandlers.datagran.postMessage(message);
   } else {
     // Call Web interface
     
-    alert("reset Web");
+    alert("Web reset");
   }
 }
 
@@ -58,7 +58,7 @@ function trackCustom(name, params) {
   } else {
   	// Call Web interface
   
-    alert("trackCustom Web "+name);
+    alert("Web trackCustom "+name);
   }
 }
 
@@ -79,7 +79,7 @@ function updateGeoParam(addGeo) {
   } else {
   	// Call Web interface
   
-    alert("updateGeoParam Web "+ addGeo);
+    alert("Web updateGeoParam "+ addGeo);
   }
 }
 
