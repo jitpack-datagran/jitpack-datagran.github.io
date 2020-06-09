@@ -6,7 +6,7 @@ var loginCredentials = { username : "", password : "" }
              datagranButtonOnclick("Logout");
         });
         document.getElementById("datagranOnClick").addEventListener("click", function() {
-             datagranButtonOnclick("ButtonClick");
+             datagranButtonOnclick("onClick");
         });
         
         document.getElementById("datagranOnKeyPress").addEventListener("input", function() {
@@ -33,10 +33,9 @@ var failure = function(message) {
 
 function datagranIdentify(userId) {
     //cordova.plugins.datagran.identify(userId, success, failure);
-    identify(userId);
+    //_dgTrack('identify', userId);
+    dg_tracker.identify(userId); 
     storage.setItem("login", true);
-    document.getElementById("username").value = "";
-    document.getElementById("password").value = "";
     storage.setItem("username", loginCredentials.username);
     storage.setItem("password", loginCredentials.password);
     setupPageHome(1);
@@ -51,19 +50,23 @@ function datagranButtonOnclick(name) {
 
 function datagranLogout() {
     //cordova.plugins.datagran.resetDGuserid(success, failure);
-    reset();
+    //_dgTrack('reset');
+    dg_tracker.reset();
     storage.setItem("login", false);
     loginCredentials.username = "";
     loginCredentials.password = "";
     storage.setItem("username", "");
     storage.setItem("password", "");
+	document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
     setupPageHome(2);
 }
 
 function datagranOnClick(actName) {
     var eventJson = {name: actName, type: "AppCompatButton"};
     //cordova.plugins.datagran.trackCustom(trackOnClickEventJson, success, failure);
-    trackCustom("onClick", eventJson);
+    //_dgTrack("onClick", eventJson);
+    //dg_tracker.trackEvent("onClick", eventJson);
 }
 
 /*function datagranOnDoubleClick(actName) {
@@ -74,25 +77,29 @@ function datagranOnClick(actName) {
 function datagranDropdownChange(id, menu) {
     var eventJson = {elementID: id, name: menu};
     //cordova.plugins.datagran.trackCustom(trackDropdownEventJson, success, failure);
-    trackCustom("DropDown", eventJson);
+    //_dgTrack("DropDown", eventJson);
+    dg_tracker.trackEvent("DropDown", eventJson);
 }
 
 function datgranTrackViews(view) {
     var eventJson = {viewName: view};
     //cordova.plugins.datagran.trackCustom(trackTrackViewJson, success, failure);
-    trackCustom("Views", eventJson);
+    //_dgTrack("Views", eventJson);
+    //dg_tracker.trackEvent("Views", eventJson);
 }
 
 function datagranOnKeyPress(val) {
     var eventJson = {value: val};
     //cordova.plugins.datagran.trackCustom(trackTrackViewJson, success, failure);
-    trackCustom("onKeyPress", eventJson);
+    //_dgTrack("onKeyPress", eventJson);
+    dg_tracker.trackEvent("onKeyPress", eventJson);
 }
 
 function datagranOnFocusChange(val) {
     var eventJson = {value: val};
     //cordova.plugins.datagran.trackCustom(trackTrackViewJson, success, failure);
-    trackCustom("onFocusChange", eventJson);
+    //_dgTrack("onFocusChange", eventJson);
+    dg_tracker.trackEvent("onFocusChange", eventJson);
 }
 
 
