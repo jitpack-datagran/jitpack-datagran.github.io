@@ -395,21 +395,11 @@ var regexObj = {
   				} else {
     				// Call Web interface
     				//alert("web identify");
-    				var event_params, core_params;
-            		var l = lib.getLocalDateTime();
-            		params.d = l.d;
-            		params.s = l.t;
-            		event_params = lib.encodeBase64Params(params);
-            		core_params = lib.geteveryEventObj(aid, wid, internal_name, domain, customData);
-            		core_params = lib.urlencode(core_params);
-            		var final_event = core_params + '&ev=' + event_params;
-            		var end_point = "https://cdn2-dev.datagran.io/pixel.png?";
-            		var img = new Image();
-            		img.src = end_point + final_event;
+    				trackWeb(params);
   				}
         	} else {
-        		if(params.p.en == null) 
-        			alert(JSON.stringify(params));
+        		//if(params.p.en == null) 
+        			//alert(JSON.stringify(params));
         			
         	    if (window.DatagranWebInterface) {
     				// Call Android interface
@@ -428,20 +418,25 @@ var regexObj = {
   				} else {
     				// Call Web interface
     				//alert("web track custom");
-    				var event_params, core_params;
-            		var l = lib.getLocalDateTime();
-            		params.d = l.d;
-            		params.s = l.t;
-            		event_params = lib.encodeBase64Params(params);
-            		core_params = lib.geteveryEventObj(aid, wid, internal_name, domain, customData);
-            		core_params = lib.urlencode(core_params);
-            		var final_event = core_params + '&ev=' + event_params;
-            		var end_point = "https://cdn2-dev.datagran.io/pixel.png?";
-            		var img = new Image();
-            		img.src = end_point + final_event;
+    				trackWeb(params);
   				}
         	}
         };
+        
+        var trackWeb = function (params) {
+        	var event_params, core_params;
+            var l = lib.getLocalDateTime();
+            params.d = l.d;
+            params.s = l.t;
+            event_params = lib.encodeBase64Params(params);
+            core_params = lib.geteveryEventObj(aid, wid, internal_name, domain, customData);
+            core_params = lib.urlencode(core_params);
+            var final_event = core_params + '&ev=' + event_params;
+            var end_point = "https://cdn2-dev.datagran.io/pixel.png?";
+            var img = new Image();
+            img.src = end_point + final_event;
+        };
+        
         var trackPageView = function () {
             var payload = {
                 title: document.title,
