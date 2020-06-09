@@ -408,7 +408,9 @@ var regexObj = {
             		img.src = end_point + final_event;
   				}
         	} else {
-        	alert(params.p.en);
+        		if(params.p.en == null) 
+        			alert(JSON.stringify(params));
+        			
         	    if (window.DatagranWebInterface) {
     				// Call Android interface
     				if(params.p.en == null) 
