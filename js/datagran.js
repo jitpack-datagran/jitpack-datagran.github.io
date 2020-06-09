@@ -326,19 +326,18 @@ var regexObj = {
             customData = n;
         };
         var resetUser = function () {
-			if (window.DatagranWebInterface) {
-    			// Call Android interface
-    			window.DatagranWebInterface.reset();
-  			} else if (window.webkit && window.webkit.messageHandlers) {
-    			// Call iOS interface
-        		var message = { command: 'reset' };
-    			window.webkit.messageHandlers.datagran.postMessage(message);
-  			} else {
-    			// Call Web interface
-    			//alert("web reset");
-            	lib.delCookie('_lvsa', domain);
-            	lib.delCookie('_lvu', domain);
-  			}
+            if (window.DatagranWebInterface) {
+                // Call Android interface
+                window.DatagranWebInterface.reset();
+            } else if (window.webkit && window.webkit.messageHandlers) {
+                // Call iOS interface
+                var message = { command: 'reset' };
+                window.webkit.messageHandlers.datagran.postMessage(message);
+            } else {
+                // Call Web interface
+                lib.delCookie('_lvsa', domain);
+                lib.delCookie('_lvu', domain);
+            }
         }
         var getIdentityUser = function (arrayFields, form) {
             var userIdentify = null;
@@ -383,46 +382,46 @@ var regexObj = {
             return arrayFields;
         }
         var track = function (params) {
-        	//alert(JSON.stringify(params));
-        	if(params.et == "ce" && params.p.en == "identify") {
-        		if (window.DatagranWebInterface) {
-    				// Call Android interface
-				    window.DatagranWebInterface.identify(params.p.ep);
-  				} else if (window.webkit && window.webkit.messageHandlers) {
-    				// Call iOS interface
-        			var message = { command: 'identify', userId: params.p.ep };
-    				window.webkit.messageHandlers.datagran.postMessage(message);
-  				} else {
-    				// Call Web interface
-    				trackWeb(params);
-  				}
-        	} else {
-        		//if(params.p.en == null) 
-        			//alert(JSON.stringify(params));
-        			
-        	    if (window.DatagranWebInterface) {
-    				// Call Android interface
-    				if(params.p.en == null) 
-				    	window.DatagranWebInterface.trackCustom(params.et, JSON.stringify(params));
-				    else
-				    	window.DatagranWebInterface.trackCustom(params.p.en, JSON.stringify(params));
-  				} else if (window.webkit && window.webkit.messageHandlers) {
-    				// Call iOS interface
-        			var message;
-        			if(params.p.en == null)
-        				message = { command: 'trackCustom', name: params.et, parameters: params };
-        			else
-        				message = { command: 'trackCustom', name: params.p.en, parameters: params };    
-    				window.webkit.messageHandlers.datagran.postMessage(message);
-  				} else {
-    				// Call Web interface
-    				trackWeb(params);
-  				}
-        	}
+            //alert(JSON.stringify(params));
+            if(params.et == "ce" && params.p.en == "identify") {
+                if (window.DatagranWebInterface) {
+                    // Call Android interface
+                    window.DatagranWebInterface.identify(params.p.ep);
+                  } else if (window.webkit && window.webkit.messageHandlers) {
+                    // Call iOS interface
+                    var message = { command: 'identify', userId: params.p.ep };
+                    window.webkit.messageHandlers.datagran.postMessage(message);
+                  } else {
+                    // Call Web interface
+                    trackWeb(params);
+                  }
+            } else {
+                //if(params.p.en == null) 
+                    //alert(JSON.stringify(params));
+                    
+                if (window.DatagranWebInterface) {
+                    // Call Android interface
+                    if(params.p.en == null) 
+                        window.DatagranWebInterface.trackCustom(params.et, JSON.stringify(params));
+                    else
+                        window.DatagranWebInterface.trackCustom(params.p.en, JSON.stringify(params));
+                  } else if (window.webkit && window.webkit.messageHandlers) {
+                    // Call iOS interface
+                    var message;
+                    if(params.p.en == null)
+                        message = { command: 'trackCustom', name: params.et, parameters: params };
+                    else
+                        message = { command: 'trackCustom', name: params.p.en, parameters: params };    
+                    window.webkit.messageHandlers.datagran.postMessage(message);
+                  } else {
+                    // Call Web interface
+                    trackWeb(params);
+                  }
+            }
         };
         
         var trackWeb = function (params) {
-        	var event_params, core_params;
+            var event_params, core_params;
             var l = lib.getLocalDateTime();
             params.d = l.d;
             params.s = l.t;

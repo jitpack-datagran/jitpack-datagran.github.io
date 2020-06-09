@@ -2,7 +2,7 @@ var storage = window.localStorage;
 
 var loginCredentials = { username : "", password : "" }
 
-		document.getElementById("datagranLogout").addEventListener("click", function() {
+        document.getElementById("datagranLogout").addEventListener("click", function() {
              datagranButtonOnclick("Logout");
         });
         document.getElementById("datagranOnClick").addEventListener("click", function() {
@@ -57,7 +57,7 @@ function datagranLogout() {
     loginCredentials.password = "";
     storage.setItem("username", "");
     storage.setItem("password", "");
-	document.getElementById("username").value = "";
+    document.getElementById("username").value = "";
     document.getElementById("password").value = "";
     setupPageHome(2);
 }
