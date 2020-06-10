@@ -1,10 +1,41 @@
 var dg_tracker;
 var regexObj = {
     "re_email_etl": /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    "re_phone_etl": /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
 };
 (function () {
     function lib() {
+    }
+    ;
+    lib.time_zones = {
+        'tz-12': "America/Baker Island",
+        'tz-11': "America/Pago Pago",
+        'tz-10': "America/Honolulu",
+        'tz-9': "America/Juneau",
+        'tz-8': "America/Los Angeles",
+        'tz-7': "America/Denver",
+        'tz-6': "America/San Jose",
+        'tz-5': "America/Bogota",
+        'tz-4': "America/Port of Spain",
+        'tz-3': "America/Buenos Aires",
+        'tz-2': "America/King Edward Point",
+        'tz-1': "Africa/Praia",
+        'tz0': "Europe/London",
+        'tz+1': "Europe/Berlin",
+        'tz+2': "Europe/Bucharest",
+        'tz+3': "Africa/Khartoum",
+        'tz+4': "Asia/Baku",
+        'tz+5': "Asia/Islamabad",
+        'tz+6': "Asia/Dhaka",
+        'tz+7': "Asia/Bangkok",
+        'tz+8': "Asia/Hong Kong",
+        'tz+9': "Asia/Tokyo",
+        'tz+10': "Asia/Port Moresby",
+        'tz+11': "Asia/Noumea",
+        'tz+12': "Oceania/Wellington",
+        'tz+13': "Oceania/Apia"
     };
+
     lib.getUid = function (aid, domain) {
         var lvu = lib.getCookie('_lvu');
         if (lvu === '')
@@ -21,10 +52,11 @@ var regexObj = {
         }
         return lvs;
     };
-    lib.getUTCTimestamp = function()
-    {
-        return new Date().getTime();
-    }
+
+
+    lib.getVisitStartTime = function () {
+        return lib.getCookie('_lvsb');
+    };
     lib.getCookie = function (cname) {
         var name = cname + "=";
         var ca = document.cookie.split(';');
@@ -41,16 +73,13 @@ var regexObj = {
         var d = new Date();
         d.setTime(d.getTime() + time);
         var expires = "expires=" + d.toUTCString();
-        
         document.cookie = cname + "=" + cvalue + "; " + expires + ";domain=" + domain;
     };
     lib.delCookie = function (name, domain) {
-        var cur_domain = document.location.hostname;
-        document.cookie = name + '=; expires=Thu, 01-Jan-70 00:00:01 GMT;domain=' + cur_domain;
-
         document.cookie = name + '=; expires=Thu, 01-Jan-70 00:00:01 GMT;';
         document.cookie = name + '=; expires=Thu, 01-Jan-70 00:00:01 GMT;domain=' + domain;
     };
+
     lib.generateUUID = function (aid) {
         var d = new Date().getTime();
         var uuid = 'xxxxxxxx4xxxyxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -77,7 +106,9 @@ var regexObj = {
         if (flag) {
             sid = lib.generateUUID('s');
             lib.setCookie('_lvsa', sid, time, domain);
-        } else {
+            lib.setCookie('_lvsb', new Date().getTime(), time, domain);
+        }
+        else {
             sid = lib.getCookie('_lvsa');
             lib.delCookie('_lvsa', domain);
             lib.setCookie('_lvsa', sid, time, domain);
@@ -97,19 +128,49 @@ var regexObj = {
         return Base64.encode(JSON.stringify(params));
 
     };
-    lib.geteveryEventObj = function (aid, wid, internal_name, domain) {
+    lib.geteveryEventObj = function (aid, wid, internal_name, domain, customData) {
         var uid = lib.getUid(aid, domain);
         var sessionid = lib.getSessionId(domain);
         var br = lib.getBrowserDetails();
+        // var tz = "localtimez";
+        var vs = lib.getVisitStartTime();
         var dv = "D";
         var qp = lib.getQueryParams();
         if (lib.mobileAndTabletcheck()) {
             dv = "M";
         }
-        var ts = lib.getUTCTimestamp();
-        var out = { "ai": aid, "wi": wid, "ui": uid, "si": sessionid, "in": internal_name, "br": br, "dv": dv, "qp": qp, "ts": ts};
+        var version = "13";
+        var out = { "ai": aid, "wi": wid, "ui": uid, "si": sessionid, "in": internal_name, "cd": customData, "br": br, "vs": vs, "dv": dv, "qp": qp, "version": version };
         return out;
     };
+    lib.getLocalDateTime = function () {
+
+        var now = new Date();
+        var year = now.getFullYear();
+        var month = now.getMonth() + 1;
+        var day = now.getDate();
+        var hour = now.getHours();
+        var minute = now.getMinutes();
+        var second = now.getSeconds();
+        if (month.toString().length == 1) {
+            var month = '0' + month;
+        }
+        if (day.toString().length == 1) {
+            var day = '0' + day;
+        }
+        if (hour.toString().length == 1) {
+            var hour = '0' + hour;
+        }
+        if (minute.toString().length == 1) {
+            var minute = '0' + minute;
+        }
+        if (second.toString().length == 1) {
+            var second = '0' + second;
+        }
+        var ldate = year + '/' + month + '/' + day;
+        var ltime = hour + ':' + minute + ':' + second;
+        return { d: ldate, t: ltime };
+    }
     lib.getBrowserDetails = function () {
         var details, encoding;
         var navigatorObject = window.navigator;
@@ -133,6 +194,7 @@ var regexObj = {
 
         return Base64.encode(JSON.stringify(details));
     };
+
     lib.mobileAndTabletcheck = function () {
         var check = false;
         (function (a) {
@@ -140,6 +202,7 @@ var regexObj = {
         })(navigator.userAgent || navigator.vendor || window.opera);
         return check;
     };
+
     lib.getQueryParams = function () {
 
         var url = window.location + '';
@@ -155,6 +218,7 @@ var regexObj = {
         }
         return JSON.stringify(params);
     }
+
     var Base64 = {
         _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", encode: function (e) {
             var t = "";
@@ -245,7 +309,7 @@ var regexObj = {
     dg_tracker = (function () {
 
         var _this = this;
-        var aid, wid, internal_name, domain;
+        var aid, wid, internal_name, domain, customData;
         var setAccount = function (a) {
             aid = a;
         };
@@ -257,6 +321,9 @@ var regexObj = {
         };
         var setDomain = function (b) {
             domain = b;
+        };
+        var setCustomData = function (n) {
+            customData = n;
         };
         var resetUser = function () {
             if (window.DatagranWebInterface) {
@@ -274,9 +341,40 @@ var regexObj = {
         }
         var getIdentityUser = function (arrayFields, form) {
             var userIdentify = null;
-            for (j = 0; j < arrayFields.length; j++) {
-                userIdentify = regexObj["re_email_etl"].test(arrayFields[j][1]) ? arrayFields[j][1] : null;
-                if (userIdentify) { break; }
+
+            if (customData) {
+                if (customData.type === 'form') {
+                    for (var x = 0; x < customData.data.length; x++) {
+                        var formId = customData.data[x].id;
+                        var formField = customData.data[x].field;
+
+                        for (var j = 0; j < arrayFields.length; j++) {
+                            if ((formId && formField) && formId === form.name) {
+                                userIdentify = formField === arrayFields[j][0] ? arrayFields[j][1] : null;
+                            } else if (formField) {
+                                userIdentify = formField === arrayFields[j][0] ? arrayFields[j][1] : null;
+                            }
+
+                            if (userIdentify) { break; }
+                        }
+                    }
+                } else if (customData.type === 'regex') {
+                    for (var x = 0; x < customData.data.length; x++) {
+                        var formRegex = customData.data[x].regex;
+
+                        for (var j = 0; j < arrayFields.length; j++) {
+                            userIdentify = regexObj[formRegex].test(arrayFields[j][1]) ? arrayFields[j][1] : null;
+                            if (userIdentify) { break; }
+                        }
+
+                        if (userIdentify) { break; }
+                    }
+                }
+            } else {
+                for (j = 0; j < arrayFields.length; j++) {
+                    userIdentify = regexObj["re_email_etl"].test(arrayFields[j][1]) ? arrayFields[j][1] : null;
+                    if (userIdentify) { break; }
+                }
             }
 
             arrayFields.push(["user_identify", userIdentify]);
@@ -303,41 +401,39 @@ var regexObj = {
                     
                 if (window.DatagranWebInterface) {
                     // Call Android interface
-                    window.DatagranWebInterface.trackCustom(params.p.en, JSON.stringify(params));
-                    
-                    //if(params.p.en == null) 
-                    //    window.DatagranWebInterface.trackCustom(params.et, JSON.stringify(params));
-                    //else
-                    //    window.DatagranWebInterface.trackCustom(params.p.en, JSON.stringify(params));
+                    if(params.p.en == null) 
+                        window.DatagranWebInterface.trackCustom(params.et, JSON.stringify(params));
+                    else
+                        window.DatagranWebInterface.trackCustom(params.p.en, JSON.stringify(params));
                   } else if (window.webkit && window.webkit.messageHandlers) {
                     // Call iOS interface
-                    var message = { command: 'trackCustom', name: params.p.en, parameters: params };   
+                    var message;
+                    if(params.p.en == null)
+                        message = { command: 'trackCustom', name: params.et, parameters: params };
+                    else
+                        message = { command: 'trackCustom', name: params.p.en, parameters: params };    
                     window.webkit.messageHandlers.datagran.postMessage(message);
-
-                    //var message;
-                    //if(params.p.en == null)
-                    //    message = { command: 'trackCustom', name: params.et, parameters: params };
-                    //else
-                    //    message = { command: 'trackCustom', name: params.p.en, parameters: params };
-                    //window.webkit.messageHandlers.datagran.postMessage(message);
                   } else {
                     // Call Web interface
                     trackWeb(params);
                   }
             }
         };
+        
         var trackWeb = function (params) {
             var event_params, core_params;
+            var l = lib.getLocalDateTime();
+            params.d = l.d;
+            params.s = l.t;
             event_params = lib.encodeBase64Params(params);
-            core_params = lib.geteveryEventObj(aid, wid, internal_name, domain);
+            core_params = lib.geteveryEventObj(aid, wid, internal_name, domain, customData);
             core_params = lib.urlencode(core_params);
             var final_event = core_params + '&ev=' + event_params;
-            // var end_point = "https://cdn2.datagran.io/pixel.png?";
             var end_point = "https://cdn2-dev.datagran.io/pixel.png?";
-            
             var img = new Image();
-            img.src = end_point + final_event;        	
-        }
+            img.src = end_point + final_event;
+        };
+        
         var trackPageView = function () {
             var payload = {
                 title: document.title,
@@ -470,7 +566,6 @@ var regexObj = {
                 et: 'ce',
                 p: ev,
             };
-
             track(params);
         }
 
@@ -480,10 +575,10 @@ var regexObj = {
                 setWorkspace(w);
                 setDomain(d);
                 setInternalName(i);
+                setCustomData(n);
                 trackPageView();
                 trackFormSubmit();
                 trackElementClick();
-
             },
             trackEvent: function (en, params) {
                 trackEvent(en, params);
@@ -501,7 +596,8 @@ var regexObj = {
         window.datagran.aid,
         window.datagran.wid,
         window.datagran.internal_name || '',
-        window.datagran.domain);
+        window.datagran.domain,
+        window.datagran.customData);
 
     if (window._dgQ && typeof window._dgQ === 'object') {
 
@@ -518,3 +614,4 @@ var regexObj = {
         }
     }
 })();
+
