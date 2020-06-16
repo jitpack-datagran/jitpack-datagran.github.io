@@ -284,30 +284,46 @@ var regexObj = {
             return arrayFields;
         }
         var track = function (params) {
+            alert(JSON.stringify(params));
             if(params.et == "ce" && params.p.en == "identify") {
                 if (window.DatagranWebInterface) {
                     // Call Android interface
                     window.DatagranWebInterface.identify(params.p.ep);
-                } else if (window.webkit && window.webkit.messageHandlers) {
+                  } else if (window.webkit && window.webkit.messageHandlers) {
                     // Call iOS interface
                     var message = { command: 'identify', userId: params.p.ep };
                     window.webkit.messageHandlers.datagran.postMessage(message);
-                } else {
+                  } else {
                     // Call Web interface
                     trackWeb(params);
-                }
+                  }
             } else {
+                //if(params.p.en == null) 
+                    //alert(JSON.stringify(params));
+                    
                 if (window.DatagranWebInterface) {
                     // Call Android interface
                     window.DatagranWebInterface.trackCustom(params.p.en, JSON.stringify(params));
-                } else if (window.webkit && window.webkit.messageHandlers) {
+                    
+                    //if(params.p.en == null) 
+                    //    window.DatagranWebInterface.trackCustom(params.et, JSON.stringify(params));
+                    //else
+                    //    window.DatagranWebInterface.trackCustom(params.p.en, JSON.stringify(params));
+                  } else if (window.webkit && window.webkit.messageHandlers) {
                     // Call iOS interface
                     var message = { command: 'trackCustom', name: params.p.en, parameters: params };   
                     window.webkit.messageHandlers.datagran.postMessage(message);
-                } else {
+
+                    //var message;
+                    //if(params.p.en == null)
+                    //    message = { command: 'trackCustom', name: params.et, parameters: params };
+                    //else
+                    //    message = { command: 'trackCustom', name: params.p.en, parameters: params };
+                    //window.webkit.messageHandlers.datagran.postMessage(message);
+                  } else {
                     // Call Web interface
                     trackWeb(params);
-                }
+                  }
             }
         };
         var trackWeb = function (params) {
@@ -320,8 +336,8 @@ var regexObj = {
             var end_point = "https://cdn2-dev.datagran.io/pixel.png?";
             
             var img = new Image();
-            img.src = end_point + final_event;
-        };
+            img.src = end_point + final_event;        	
+        }
         var trackPageView = function () {
             var payload = {
                 title: document.title,
@@ -502,4 +518,3 @@ var regexObj = {
         }
     }
 })();
-
