@@ -265,10 +265,6 @@ var regexObj = {
             } else if (window.webkit && window.webkit.messageHandlers) {
                 // Call iOS interface
                 var message = { command: 'reset' };
-                
-                    alert(window.webkit);
-                    alert(window.webkit.messageHandlers);
-                    alert(window.webkit.messageHandlers.datagran);
                 window.webkit.messageHandlers.datagran.postMessage(message);
             } else {
                 // Call Web interface
@@ -292,12 +288,9 @@ var regexObj = {
                 if (window.DatagranWebInterface) {
                     // Call Android interface
                     window.DatagranWebInterface.identify(params.p.ep);
-                } else if (window.webkit && window.webkit.messageHandlers) {
+                } else if (window.webkit && window.webkit.messageHandlers && typeof window.webkit.messageHandlers.datagran !=== "undefined") {
                     // Call iOS interface
                     var message = { command: 'identify', userId: params.p.ep };
-                    alert(window.webkit);
-                    alert(window.webkit.messageHandlers);
-                    alert(window.webkit.messageHandlers.datagran);
                     window.webkit.messageHandlers.datagran.postMessage(message);
                 } else {
                     // Call Web interface
@@ -307,12 +300,9 @@ var regexObj = {
                 if (window.DatagranWebInterface) {
                     // Call Android interface
                     window.DatagranWebInterface.trackCustom(params.p.en, JSON.stringify(params));
-                } else if (window.webkit && window.webkit.messageHandlers) {
+                } else if (window.webkit && window.webkit.messageHandlers && typeof window.webkit.messageHandlers.datagran !=== "undefined") {
                     // Call iOS interface
                     var message = { command: 'trackCustom', name: params.p.en, parameters: params };
-                    alert(window.webkit);
-                    alert(window.webkit.messageHandlers);
-                    alert(window.webkit.messageHandlers.datagran);
                     window.webkit.messageHandlers.datagran.postMessage(message);
                 } else {
                     // Call Web interface
