@@ -284,7 +284,6 @@ var regexObj = {
             return arrayFields;
         }
         var track = function (params) {
-        alert(123);
             if(params.et == "ce" && params.p.en == "identify") {
                 if (window.DatagranWebInterface) {
                     // Call Android interface
