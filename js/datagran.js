@@ -295,6 +295,7 @@ var regexObj = {
                     window.webkit.messageHandlers.datagran.postMessage(message);
                 } else {
                     // Call Web interface
+                    alert("web");
                     trackWeb(params);
                 }
             } else {
@@ -308,6 +309,7 @@ var regexObj = {
                     window.webkit.messageHandlers.datagran.postMessage(message);
                 } else {
                     // Call Web interface
+                    alert("web");
                     trackWeb(params);
                 }
             }
