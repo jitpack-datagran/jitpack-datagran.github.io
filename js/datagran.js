@@ -262,7 +262,7 @@ var regexObj = {
             if (window.DatagranWebInterface) {
                 // Call Android interface
                 window.DatagranWebInterface.reset();
-            } else if (window.webkit && window.webkit.messageHandlers) {
+            } else if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.datagran) {
                 // Call iOS interface
                 var message = { command: 'reset' };
                 window.webkit.messageHandlers.datagran.postMessage(message);
