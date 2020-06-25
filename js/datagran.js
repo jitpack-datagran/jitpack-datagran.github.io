@@ -284,6 +284,7 @@ var regexObj = {
             return arrayFields;
         }
         var track = function (params) {
+        alert(window.navigator.userAgent);
             if(params.et == "ce" && params.p.en == "identify") {
                 if (window.DatagranWebInterface) {
                     // Call Android interface
@@ -295,7 +296,6 @@ var regexObj = {
                     window.webkit.messageHandlers.datagran.postMessage(message);
                 } else {
                     // Call Web interface
-                    alert("web");
                     trackWeb(params);
                 }
             } else {
@@ -309,7 +309,6 @@ var regexObj = {
                     window.webkit.messageHandlers.datagran.postMessage(message);
                 } else {
                     // Call Web interface
-                    alert("web");
                     trackWeb(params);
                 }
             }
