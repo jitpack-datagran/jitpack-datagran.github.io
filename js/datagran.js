@@ -302,8 +302,11 @@ var regexObj = {
                     window.DatagranWebInterface.trackCustom(params.p.en, JSON.stringify(params));
                 } else if (window.webkit && window.webkit.messageHandlers) {
                     // Call iOS interface
-                    var message = { command: 'trackCustom', name: params.p.en, parameters: params };   
-                    window.webkit!.messageHandlers.datagran.postMessage(message);
+                    var message = { command: 'trackCustom', name: params.p.en, parameters: params };
+                    alert(window.webkit);
+                    alert(window.webkit.messageHandlers);
+                    alert(window.webkit.messageHandlers.datagran);
+                    window.webkit.messageHandlers.datagran.postMessage(message);
                 } else {
                     // Call Web interface
                     trackWeb(params);
