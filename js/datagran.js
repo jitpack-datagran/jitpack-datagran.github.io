@@ -265,6 +265,7 @@ var regexObj = {
             } else if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.datagran) {
                 // Call iOS interface
                 var message = { command: 'reset' };
+                alert(window.webkit.messageHandlers.datagran);
                 window.webkit.messageHandlers.datagran.postMessage(message);
             } else {
                 // Call Web interface
