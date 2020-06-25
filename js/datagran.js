@@ -284,7 +284,6 @@ var regexObj = {
             return arrayFields;
         }
         var track = function (params) {
-        alert(!window.webkit.messageHandlers.datagran);
             if(params.et == "ce" && params.p.en == "identify") {
                 if (window.DatagranWebInterface) {
                     // Call Android interface
@@ -292,6 +291,7 @@ var regexObj = {
                 } else if (window.webkit && window.webkit.messageHandlers && !window.webkit.messageHandlers.datagran) {
                     // Call iOS interface
                     var message = { command: 'identify', userId: params.p.ep };
+                    alert(!window.webkit.messageHandlers.datagran);
                     window.webkit.messageHandlers.datagran.postMessage(message);
                 } else {
                     // Call Web interface
@@ -304,6 +304,7 @@ var regexObj = {
                 } else if (window.webkit && window.webkit.messageHandlers && !window.webkit.messageHandlers.datagran) {
                     // Call iOS interface
                     var message = { command: 'trackCustom', name: params.p.en, parameters: params };
+                    alert(!window.webkit.messageHandlers.datagran);
                     window.webkit.messageHandlers.datagran.postMessage(message);
                 } else {
                     // Call Web interface
