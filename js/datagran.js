@@ -262,10 +262,10 @@ var regexObj = {
             if (window.DatagranWebInterface) {
                 // Call Android interface
                 window.DatagranWebInterface.reset();
-            } else if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.datagran) {
+            } else if (window.webkit && window.webkit.messageHandlers) {
                 // Call iOS interface
                 var message = { command: 'reset' };
-                window.webkit!.messageHandlers.datagran.postMessage(message);
+                window.webkit.messageHandlers.datagran.postMessage(message);
             } else {
                 // Call Web interface
                 lib.delCookie('_lvsa', domain);
@@ -300,7 +300,7 @@ var regexObj = {
                 if (window.DatagranWebInterface) {
                     // Call Android interface
                     window.DatagranWebInterface.trackCustom(params.p.en, JSON.stringify(params));
-                } else if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.datagran) {
+                } else if (window.webkit && window.webkit.messageHandlers) {
                     // Call iOS interface
                     var message = { command: 'trackCustom', name: params.p.en, parameters: params };   
                     window.webkit!.messageHandlers.datagran.postMessage(message);
