@@ -13,8 +13,8 @@
     w[o].internal_name = "Karthik_Test_2";
 })(
   window, document,
-  //"js/datagran.js",
-  "https://cdn2-dev.datagran.io/datagran.js",
+  "js/datagran.js",
+  //"https://cdn2-dev.datagran.io/datagran.js",
   "datagran"
 );
 _dgTrack = function (n, p) {
