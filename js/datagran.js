@@ -265,7 +265,7 @@ var regexObj = {
             } else if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.datagran) {
                 // Call iOS interface
                 var message = { command: 'reset' };
-                window.webkit.messageHandlers.datagran.postMessage(message);
+                window.webkit!.messageHandlers.datagran.postMessage(message);
             } else {
                 // Call Web interface
                 lib.delCookie('_lvsa', domain);
@@ -303,7 +303,7 @@ var regexObj = {
                 } else if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.datagran) {
                     // Call iOS interface
                     var message = { command: 'trackCustom', name: params.p.en, parameters: params };   
-                    window.webkit.messageHandlers.datagran.postMessage(message);
+                    window.webkit!.messageHandlers.datagran.postMessage(message);
                 } else {
                     // Call Web interface
                     trackWeb(params);
