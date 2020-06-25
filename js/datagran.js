@@ -269,6 +269,7 @@ var regexObj = {
                 window.webkit.messageHandlers.datagran.postMessage(message);
             } else {
                 // Call Web interface
+                alert("web");
                 lib.delCookie('_lvsa', domain);
                 lib.delCookie('_lvu', domain);
             }
@@ -296,6 +297,7 @@ var regexObj = {
                     window.webkit.messageHandlers.datagran.postMessage(message);
                 } else {
                     // Call Web interface
+                    alert("web");
                     trackWeb(params);
                 }
             } else {
@@ -309,6 +311,7 @@ var regexObj = {
                     window.webkit.messageHandlers.datagran.postMessage(message);
                 } else {
                     // Call Web interface
+                    alert("web");
                     trackWeb(params);
                 }
             }
